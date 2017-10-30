@@ -1,0 +1,104 @@
+<!doctype HTML>
+<html>
+
+<head>
+  <title>Shamir's Secret Sharing</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <h1>Shamir's Secret Sharing</h1>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Split a Secret</h3>
+          </div>
+          <div class="panel-body">
+            <form action="" class="form-horizontal">
+              <div class="control-group"><textarea name="secret" id="secret" rows="3" style="width: 100%" placeholder="Super secret stuff" class="form-control"></textarea></div>
+
+              <label for="pieces">Pieces</label>
+              <div class="input-group"><input type="number" id="pieces" name="pieces" value="3" class="form-control" /></div>
+
+              <label for="threshold">Threshold</label>
+              <div class="input-group"><input type="number" id="threshold" name="threshold" value="2" class="form-control" /></div>
+
+              <h3>Pieces</h3>
+              <pre id="piecesResult"></pre>
+            </form>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Recombine Pieces</h3>
+          </div>
+          <div class="panel-body">
+            <textarea name="" id="recombinedPieces" rows="3" class="form-control" placeholder="8016c114cf7d32a295c8432b87c73835d0d&#10;802d82298f0bbef520015046d4ce6aabaae"></textarea>
+
+            <h3>Secret</h3>
+            <pre id="secretResult"></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="js/secrets.js"></script>
+
+  <script>
+  const [
+  secret,
+  pieces,
+  threshold,
+  piecesResult,
+  recombinedPieces,
+  secretResult
+] = [
+  "secret",
+  "pieces",
+  "threshold",
+  "piecesResult",
+  "recombinedPieces",
+  "secretResult"
+].map(id => document.getElementById(id));
+
+const calculatePieces = () => {
+  console.log("calculating pieces");
+  let shares = [];
+  try {
+    shares = secrets.share(
+      secrets.str2hex(secret.value),
+      +pieces.value,
+      +threshold.value
+    );
+    piecesResult.innerHTML = shares.join("\n");
+  } catch (e) {
+    piecesResult.innerHTML = e;
+  }
+};
+
+calculatePieces();
+
+[secret, pieces, threshold].forEach(e => {
+  e.addEventListener("keyup", calculatePieces);
+});
+
+recombinedPieces.addEventListener("keyup", () => {
+  try {
+    const result = secrets.hex2str(
+      secrets.combine(recombinedPieces.value.split("\n"))
+    );
+    secretResult.innerHTML = result;
+  } catch (e) {
+    secretResult.innerHTML = e;
+  }
+});
+
+// secrets.hex2str
+</script>
+</body>
+
+</html>
