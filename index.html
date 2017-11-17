@@ -1382,7 +1382,7 @@ recombinedPieces.addEventListener("keyup", () => {
     const result = secrets.hex2str(
       secrets.combine(recombinedPieces.value.split("\n"))
     );
-    secretResult.innerHTML = result;
+    secretResult.innerText = result;
   } catch (e) {
     secretResult.innerHTML = e;
   }
