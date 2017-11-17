@@ -150,10 +150,10 @@
               <textarea name="secret" id="secret" rows="4" style="width: 100%" placeholder="Super secret stuff" class="form-control"></textarea>
 
               <label for="pieces">Pieces</label>
-              <div class="input-group"><input type="number" id="pieces" name="pieces" value="3" class="form-control" /></div>
+              <div class="input-group"><input type="number" id="pieces" name="pieces" value="3" class="form-control" min="2" /></div>
 
               <label for="threshold">Threshold</label>
-              <div class="input-group"><input type="number" id="threshold" name="threshold" value="2" class="form-control" /></div>
+              <div class="input-group"><input type="number" id="threshold" name="threshold" value="2" class="form-control" min="2" /></div>
 
               <h3>Pieces</h3>
               <pre id="piecesResult"></pre>
@@ -1357,7 +1357,10 @@
 ].map(id => document.getElementById(id));
 
 const calculatePieces = () => {
-  console.log("calculating pieces");
+  const maxThreshold = pieces.value;
+  threshold.max = maxThreshold;
+  threshold.value = Math.min(+maxThreshold, +threshold.value);
+
   let shares = [];
   try {
     shares = secrets.share(
