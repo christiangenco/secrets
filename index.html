@@ -1377,10 +1377,11 @@ const calculatePieces = () => {
 calculatePieces();
 
 [secret, pieces, threshold].forEach(e => {
-  e.addEventListener("keydown", calculatePieces);
+  // e.addEventListener("change", calculatePieces);
+  e.addEventListener("keyup", calculatePieces);
 });
 
-recombinedPieces.addEventListener("keydown", () => {
+recombinedPieces.addEventListener("keyup", () => {
   try {
     const result = secrets.hex2str(
       secrets.combine(recombinedPieces.value.split("\n"))
